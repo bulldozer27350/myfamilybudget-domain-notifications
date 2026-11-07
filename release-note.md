@@ -4,17 +4,17 @@ Toutes les versions publiées de ce dépôt respectent la spécification [SemVer
 
 ---
 
-## [0.0.1-SNAPSHOT] - 2026-11-01
+## [0.0.1] - 2026-11-07
 
 ### Type de release
-**PATCH** (Initialisation technique et tests de la configuration multi-dépôts)
+**Version initiale** (mise en place et validation de la structure autonome multi-dépôts)
 
 ### Résumé
-Mise en place de la structure autonome multi-modules du silo Notifications (`domain-notifications`), regroupant `notifications-api` et `notifications-core` avec import du BOM centralisé, cycle de build autonome et configuration de déploiement GitHub Packages.
+Première version stable du silo Notifications (`domain-notifications`), regroupant `notifications-api` et `notifications-core` avec import du BOM centralisé, cycle de build autonome et configuration de déploiement GitHub Packages.
 
 ### Changements par composant
 - **`notifications-api`** : contrats, paramètres, entrées de règles (aucun changement métier).
 - **`notifications-core`** : règles pures, dispatch, paramètres, canal Web Push, et persistance JPA des paramètres, du journal d'envoi et des abonnements.
 
 ### Rétro-compatibilité & Compatibilité binaire
-- Version initiale de calibrage technique 0.0.1.
+Non applicable : version initiale, aucune version antérieure publiée.
