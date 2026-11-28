@@ -44,6 +44,7 @@ public class DefaultNotificationDispatchService implements NotificationDispatchS
     private final DebitThresholdRule debitThresholdRule;
     private final BalanceFloorRule balanceFloorRule;
     private final ObjectifReachableRule objectifReachableRule;
+    private final PeriodicExpenseDueRule periodicExpenseDueRule;
     private final List<NotificationChannel> channels;
     private final NotificationSettingsService settingsService;
     private final NotificationSentLogStore sentLogStore;
@@ -52,9 +53,19 @@ public class DefaultNotificationDispatchService implements NotificationDispatchS
             BalanceFloorRule balanceFloorRule, ObjectifReachableRule objectifReachableRule,
             List<NotificationChannel> channels, NotificationSettingsService settingsService,
             NotificationSentLogStore sentLogStore) {
+        this(debitThresholdRule, balanceFloorRule, objectifReachableRule, new PeriodicExpenseDueRule(),
+                channels, settingsService, sentLogStore);
+    }
+
+    public DefaultNotificationDispatchService(DebitThresholdRule debitThresholdRule,
+            BalanceFloorRule balanceFloorRule, ObjectifReachableRule objectifReachableRule,
+            PeriodicExpenseDueRule periodicExpenseDueRule,
+            List<NotificationChannel> channels, NotificationSettingsService settingsService,
+            NotificationSentLogStore sentLogStore) {
         this.debitThresholdRule = debitThresholdRule;
         this.balanceFloorRule = balanceFloorRule;
         this.objectifReachableRule = objectifReachableRule;
+        this.periodicExpenseDueRule = periodicExpenseDueRule != null ? periodicExpenseDueRule : new PeriodicExpenseDueRule();
         this.channels = channels;
         this.settingsService = settingsService;
         this.sentLogStore = sentLogStore;
@@ -79,6 +90,9 @@ public class DefaultNotificationDispatchService implements NotificationDispatchS
         sent += runRule(debitThresholdRule, inputs.debitThreshold(), settings, manual);
         sent += runRule(balanceFloorRule, inputs.balanceFloor(), settings, manual);
         sent += runRule(objectifReachableRule, inputs.objectifReachable(), settings, manual);
+        if (inputs.periodicExpenseDue() != null) {
+            sent += runRule(periodicExpenseDueRule, inputs.periodicExpenseDue(), settings, manual);
+        }
         return sent;
     }
 

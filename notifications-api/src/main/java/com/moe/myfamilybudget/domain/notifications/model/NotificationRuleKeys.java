@@ -19,6 +19,9 @@ public final class NotificationRuleKeys {
     /** Règle « objectif atteignable ». */
     public static final String OBJECTIF_REACHABLE = "objectif-reachable";
 
+    /** Règle « échéance périodique à venir » (PROV-09). */
+    public static final String PERIODIC_EXPENSE_DUE = "periodic-expense-due";
+
     private NotificationRuleKeys() {
     }
 }

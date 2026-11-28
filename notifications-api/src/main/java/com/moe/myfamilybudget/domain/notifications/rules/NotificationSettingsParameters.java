@@ -23,6 +23,8 @@ import com.moe.myfamilybudget.domain.notifications.model.NotificationRuleKeys;
  * @param quietHoursEnd            fin de la plage silencieuse, format "HH:mm" ; peut être
  *                                 antérieure à {@code quietHoursStart} (plage chevauchant minuit,
  *                                 ex. 22:00 → 07:00)
+ * @param periodicExpenseDueEnabled section "échéance périodique à venir" activée (PROV-09)
+ * @param periodicExpenseDueMonthsAhead nombre de mois d'anticipation pour l'alerte d'échéance (1 ou 2, défaut 1)
  */
 public record NotificationSettingsParameters(
         Boolean debitThresholdEnabled,
@@ -32,14 +34,30 @@ public record NotificationSettingsParameters(
         Boolean objectifReachableEnabled,
         Boolean quietHoursEnabled,
         String quietHoursStart,
-        String quietHoursEnd) {
+        String quietHoursEnd,
+        Boolean periodicExpenseDueEnabled,
+        Integer periodicExpenseDueMonthsAhead) {
 
     private static final BigDecimal MAX_AMOUNT = new BigDecimal("10000000");
+
+    public NotificationSettingsParameters(
+            Boolean debitThresholdEnabled,
+            BigDecimal debitThresholdAmount,
+            Boolean balanceFloorEnabled,
+            BigDecimal balanceFloorAmount,
+            Boolean objectifReachableEnabled,
+            Boolean quietHoursEnabled,
+            String quietHoursStart,
+            String quietHoursEnd) {
+        this(debitThresholdEnabled, debitThresholdAmount, balanceFloorEnabled, balanceFloorAmount,
+                objectifReachableEnabled, quietHoursEnabled, quietHoursStart, quietHoursEnd,
+                false, 1);
+    }
 
     public static NotificationSettingsParameters defaults() {
         return new NotificationSettingsParameters(
                 false, BigDecimal.valueOf(500), false, BigDecimal.ZERO, false,
-                false, "22:00", "07:00");
+                false, "22:00", "07:00", false, 1);
     }
 
     /** Section active pour la clé de règle donnée (voir {@link NotificationRule#key()}). */
@@ -48,6 +66,7 @@ public record NotificationSettingsParameters(
             case NotificationRuleKeys.DEBIT_THRESHOLD -> Boolean.TRUE.equals(debitThresholdEnabled);
             case NotificationRuleKeys.BALANCE_FLOOR -> Boolean.TRUE.equals(balanceFloorEnabled);
             case NotificationRuleKeys.OBJECTIF_REACHABLE -> Boolean.TRUE.equals(objectifReachableEnabled);
+            case NotificationRuleKeys.PERIODIC_EXPENSE_DUE -> Boolean.TRUE.equals(periodicExpenseDueEnabled);
             default -> false;
         };
     }

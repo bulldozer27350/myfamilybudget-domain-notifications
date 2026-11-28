@@ -15,11 +15,19 @@ import java.util.function.Function;
  */
 public interface NotificationDispatchService {
 
-    /** Entrées des trois règles, assemblées paresseusement à partir des paramètres de notification. */
+    /** Entrées des règles, assemblées paresseusement à partir des paramètres de notification. */
     record RuleInputs(
             Function<NotificationSettingsParameters, DebitThresholdInput> debitThreshold,
             Function<NotificationSettingsParameters, BalanceFloorInput> balanceFloor,
-            Function<NotificationSettingsParameters, ObjectifReachableInput> objectifReachable) {
+            Function<NotificationSettingsParameters, ObjectifReachableInput> objectifReachable,
+            Function<NotificationSettingsParameters, PeriodicExpenseDueInput> periodicExpenseDue) {
+
+        public RuleInputs(
+                Function<NotificationSettingsParameters, DebitThresholdInput> debitThreshold,
+                Function<NotificationSettingsParameters, BalanceFloorInput> balanceFloor,
+                Function<NotificationSettingsParameters, ObjectifReachableInput> objectifReachable) {
+            this(debitThreshold, balanceFloor, objectifReachable, null);
+        }
     }
 
     /**
